@@ -1,0 +1,17 @@
+<html>
+<input tipe="text" id ="fala"></input>
+<button onclick="falar()" > falar </button>
+
+
+</html>
+<script>
+function falar(){
+console.log("falou");
+ var msg = new SpeechSynthesisUtterance();       
+        msg.voiceURI = "native";
+		msg.text= document.getElementById("fala").value;
+		msg.lang = 'pt-BR';
+
+        speechSynthesis.speak(msg);
+		}
+</script>
