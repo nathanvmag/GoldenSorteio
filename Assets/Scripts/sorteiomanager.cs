@@ -424,7 +424,7 @@ public class sorteiomanager : MonoBehaviour {
     {
         try
         {
-            textTospeec.talk(text);
+            Camera.main.GetComponent<textTospeec>().Talk2(text);
         }
         catch
         {

@@ -258,7 +258,7 @@ public class datamanager : MonoBehaviour {
                 }
                 if (!sorteando)
                 {
-                    if (!sorteando && psint <= 20&&psint>0 && proxsortarr.Count > 0 )//&& int.Parse(limitresg) <= timelimitresg.Second)
+                    if (!sorteando && psint <= 20&&psint>0)// && proxsortarr.Count > 0 )//&& int.Parse(limitresg) <= timelimitresg.Second)
                     {
                        
 
@@ -506,6 +506,7 @@ public class datamanager : MonoBehaviour {
                             }
 
                             int much = ult10.Count > 6 ? 6 : ult10.Count;
+                            if (much == 0) whatshow++;
                             for (int i = 0; i < much; i++)
                             {
 
@@ -542,6 +543,7 @@ public class datamanager : MonoBehaviour {
                             }
                             JSONArray proxsort = (JSONArray)json["proximos_sorteios"];
                             int much = proxsort.Count > 6 ? 6 : proxsort.Count;
+                            if (much == 0) whatshow++;
                             for (int i = 0; i < much; i++)
                             {
                                 try
@@ -585,6 +587,7 @@ public class datamanager : MonoBehaviour {
                                 if (t.gameObject.tag == "userinf") Destroy(t.gameObject);
                             }
                             int much = last10sort.Count > 6 ? 6 : last10sort.Count;
+                            if (much == 0) whatshow++;
                             for (int i = 0; i < much; i++)
                             {
                                 WWW imgwww = new WWW(imgplace + last10sort[i]["picture"]);
@@ -614,6 +617,7 @@ public class datamanager : MonoBehaviour {
                             }
 
                             int much = lastpremios.Count > 6 ? 6 : lastpremios.Count;
+                            if (much == 0) whatshow = 0;
                             for (int i = 0; i < much; i++)
                             {
                                 var infuser = Instantiate(userinf2, utiparent.transform);
