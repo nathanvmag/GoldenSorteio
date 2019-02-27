@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using System.Globalization;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
+
 public class datamanager : MonoBehaviour {
     public static string localid = "";
       public static string jsonurl = "http://ec2-18-228-130-49.sa-east-1.compute.amazonaws.com/endpoint.php?local_id=fac12aa3a25a00eb&origem=view";
@@ -12,10 +14,10 @@ public class datamanager : MonoBehaviour {
      public string imgplace = "http://ec2-18-228-130-49.sa-east-1.compute.amazonaws.com/upload/";
     string lastFetch = "";
     int whatshow = 0,lastup=-1;
-    string[] whatshowstext = new string[4] { "Vencedores", "Sorteios", "Vencedores", "Prêmios" };
-    public GameObject userinfGameObj,userinf2,utiparent ;
+    string[] whatshowstext = new string[4] { "Vencedores", "Sorteios", "", "Prêmios" };
+    public GameObject userinfGameObj,userinf2,utiparent, bemvindogameob;
     public Text wtshowtx;
-    public AudioClip swipe;
+    public AudioClip swipe,bemvindclip;
     public Sprite[] infsbgs;
     public Sprite noWinner;
     JSONArray ult10,lastdispo,last10sort, lastpremios;
@@ -40,6 +42,8 @@ public class datamanager : MonoBehaviour {
     public bool sorteandojackpot;
     string lastuserjackpot;
     bool wait,showdispo,mostravence;
+    JSONNode ultimo;
+    List<falados> faladoslist;
     // Use this for l
     void Start () {
         Application.runInBackground = true;
@@ -47,6 +51,7 @@ public class datamanager : MonoBehaviour {
         sorteando = false;
         sorteandojackpot = false;
         wait = false;
+        faladoslist = new List<falados>();
         // if (PlayerPrefs.HasKey("localid")) localid = PlayerPrefs.GetString("localid");
         fixtexts();
 
@@ -96,7 +101,7 @@ public class datamanager : MonoBehaviour {
         last10sort = new JSONArray();
         lastpremios = new JSONArray();
         winnerImage = GameObject.Find("winnerImage").GetComponent<SpriteRenderer>();
-        InvokeRepeating("stdate", 0.1f, 0.2f);
+        InvokeRepeating("stdate", 0.1f, 5f);
 
         StartCoroutine(counter());
         timerest = GameObject.Find("temposort");
@@ -122,7 +127,6 @@ public class datamanager : MonoBehaviour {
         if (!string.IsNullOrEmpty(localid))
         {
             nozone.enabled = false;
-            wtshowtx.text = whatshowstext[whatshow];
 
             if (limiresgint > 0)
             {
@@ -425,8 +429,30 @@ public class datamanager : MonoBehaviour {
                 JSONArray disponiveis = (JSONArray)json["disponiveis"];
                 JSONArray ultimos10sorts = (JSONArray)json["ultimos10Sorteados"];
                 JSONArray premios = (JSONArray)json["premios_disponiveis"];
+               // disponiveis = ultimos10;
                 //Debug.Log("aqui "+ ultimos.ToString()+ "  "+ ultimos10sorts.ToString());
-             
+                if(disponiveis.Count>0)
+                {
+                    if (ultimo == null)
+                        ultimo = disponiveis[0];
+                    else if (ultimo["user_id"] != disponiveis[0]["user_id"])
+                    {
+                        ultimo = disponiveis[0];
+
+                        falados fd = new falados(ultimo["user_id"], System.DateTime.Now);
+                        Debug.Log("ultimo trocou");
+                        if(!sorteando&&(psint>40||limiresgint>40))
+                        {
+                            if (falados.possofalar(faladoslist, fd)&&GetComponent<localmanager>().falabemvindo.isOn)
+                            {
+
+                                StartCoroutine(playbenvindo(ultimo["name"]));
+                                faladoslist.Add(fd);
+                            }
+                            else Debug.Log("Nao posso falar pq ja falei");
+                        }
+                    }
+                }
                 if (!sorteando)
                 {
                     if(ultimos10.Count>0 &&vencedor.Count>0)
@@ -494,19 +520,19 @@ public class datamanager : MonoBehaviour {
                     else
                     {
                         dispos.SetActive(false);
-
+                        if(ultimos10!=null &&ult10!=null)
                         if ((ultimos10.ToString() != ult10.ToString() || lastup != 0) && whatshow == 0)
                         {
                             lastup = 0;
                             //Camera.main.GetComponent<AudioSource>().PlayOneShot(swipe);
                             ult10 = ultimos10;
+                            wtshowtx.text = "";
                             foreach (Transform t in utiparent.transform)
                             {
                                 if (t.gameObject.tag == "userinf") Destroy(t.gameObject);
                             }
 
                             int much = ult10.Count > 6 ? 6 : ult10.Count;
-                            if (much == 0) whatshow++;
                             for (int i = 0; i < much; i++)
                             {
 
@@ -529,21 +555,26 @@ public class datamanager : MonoBehaviour {
                                 infuser.SetActive(true);
                                 if (i == 4) break;
                             }
+                            if (much != 0)
+                                wtshowtx.text = whatshowstext[whatshow];
+                            else wtshowtx.text = "";
+
+                            if (much == 0) whatshow++;
 
 
                         }
                         else if ((lastpremios.ToString() != premios.ToString() || lastup != 1) && whatshow == 1)
                         {
                             lastpremios = premios;
-
+                            wtshowtx.text = "";
                             //Camera.main.GetComponent<AudioSource>().PlayOneShot(swipe);
                             foreach (Transform t in utiparent.transform)
                             {
                                 if (t.gameObject.tag == "userinf") Destroy(t.gameObject);
                             }
+
                             JSONArray proxsort = (JSONArray)json["proximos_sorteios"];
                             int much = proxsort.Count > 6 ? 6 : proxsort.Count;
-                            if (much == 0) whatshow++;
                             for (int i = 0; i < much; i++)
                             {
                                 try
@@ -574,50 +605,63 @@ public class datamanager : MonoBehaviour {
 
                                 }
                             }
+                            if(much>1)
+                            wtshowtx.text = whatshowstext[whatshow];
+                            if (much == 0) whatshow++;
+
                             lastup = 1;
+
                         }
+                        
 
-                        else if ((last10sort.ToString() != ultimos10sorts.ToString() || lastup != 2) && whatshow == 2)
+                        else if ((last10sort.ToString() != disponiveis.ToString() || lastup != 2) && whatshow == 2)
                         {
-                            last10sort = ultimos10sorts;
-
+                            last10sort = disponiveis;
+                            wtshowtx.text = "";
                             //Camera.main.GetComponent<AudioSource>().PlayOneShot(swipe);
                             foreach (Transform t in utiparent.transform)
                             {
                                 if (t.gameObject.tag == "userinf") Destroy(t.gameObject);
                             }
+
                             int much = last10sort.Count > 6 ? 6 : last10sort.Count;
-                            if (much == 0) whatshow++;
+                            much = much > 1 ? 1 : much;
                             for (int i = 0; i < much; i++)
                             {
                                 WWW imgwww = new WWW(imgplace + last10sort[i]["picture"]);
                                 yield return imgwww;
                                 if (!string.IsNullOrEmpty(imgwww.error))
                                     continue;
-                                var infuser = Instantiate(userinfGameObj, utiparent.transform);
+                                var infuser = Instantiate(bemvindogameob, utiparent.transform);
                                 infuser.transform.Find("username").GetComponent<Text>().text = last10sort[i]["name"];
 
-                                infuser.transform.Find("brancofund").Find("mask").Find("userimage").GetComponent<Image>().sprite = Sprite.Create(imgwww.texture, new Rect(0, 0, imgwww.texture.width, imgwww.texture.height), new Vector2(0, 0));
-                                infuser.transform.Find("barrabg").GetComponent<Image>().sprite = infsbgs[Random.Range(0, 4)];
+                                infuser.transform.Find("Image").Find("brancofund").Find("mask").Find("userimage").GetComponent<Image>().sprite = Sprite.Create(imgwww.texture, new Rect(0, 0, imgwww.texture.width, imgwww.texture.height), new Vector2(0, 0));
+                                //infuser.transform.Find("barrabg").GetComponent<Image>().sprite = infsbgs[Random.Range(0, 4)];
                                 // if (i == 5) infuser.SetActive(false);
                                 infuser.SetActive(true);
                                 if (i == 4) break;
                             }
                             lastup = 2;
+                            if (much != 0)
+                                wtshowtx.text = whatshowstext[whatshow];
+                            else wtshowtx.text = "";
+                            if (much == 0) whatshow++;
+
 
                         }
                         else if ((lastpremios.ToString() != premios.ToString() || lastup != 3) && whatshow == 3)
                         {
                             lastpremios = premios;
-
+                            wtshowtx.text = "";
                             // Camera.main.GetComponent<AudioSource>().PlayOneShot(swipe);
                             foreach (Transform t in utiparent.transform)
                             {
                                 if (t.gameObject.tag == "userinf") Destroy(t.gameObject);
                             }
+                            //wtshowtx.text = whatshowstext[whatshow];
+
 
                             int much = lastpremios.Count > 6 ? 6 : lastpremios.Count;
-                            if (much == 0) whatshow = 0;
                             for (int i = 0; i < much; i++)
                             {
                                 var infuser = Instantiate(userinf2, utiparent.transform);
@@ -631,6 +675,11 @@ public class datamanager : MonoBehaviour {
 
                             }
                             lastup = 3;
+                            if (much != 0)
+                                wtshowtx.text = whatshowstext[whatshow];
+                            else wtshowtx.text = "";
+                            if (much == 0) whatshow = 0;
+
                         }
                     }
                 }
@@ -653,6 +702,14 @@ public class datamanager : MonoBehaviour {
     {
         GetComponent<sorteiomanager>().startJackpotvoid(JSON.Parse(lastFetch), a);
     }
+    IEnumerator playbenvindo(string nome)
+    {
+       Camera.main.GetComponent<AudioSource>().PlayOneShot(bemvindclip);
+        yield return new WaitForSeconds(2);
+        GetComponent<sorteiomanager>().tryspeak("Bem vindo... " + nome + "... chequím efetuado... boa sorte!!!");
+
+
+    }
     IEnumerator counter()
     {
         int ct = 0;
@@ -661,7 +718,7 @@ public class datamanager : MonoBehaviour {
             yield return new WaitForSeconds(10);
             ct++;
             whatshow = ct % 4;
-            whatshow = whatshow == 2 ? 3 : whatshow;
+           /// whatshow = whatshow == 2 ? 3 : whatshow;
             if (whatshow == 0) ct = 0;
         }
 
@@ -675,7 +732,34 @@ public class datamanager : MonoBehaviour {
     {
         int seg = int.Parse(segs);
         int min = seg / 60;
+        int hour = min / 60;
+        if (hour > 0) min = min % 60;
         seg = seg % 60;
-        return ( min>0?min + ":":"") + (seg>9?seg+"":"0"+seg);
+        return  (hour>0?hour+":":"")+( min>0?min + ":":"") + (seg>9?seg+"":"0"+seg);
+    }
+}
+public class falados
+{
+    public string id;
+    System.DateTime when;
+    public falados (string i,System.DateTime dt)
+    {
+        id = i;
+        when = dt;
+    }
+    public static bool  possofalar(List<falados> faladoslist,falados fd)
+    {
+        if(faladoslist.Contains(fd))
+        {
+            double hrs = (fd.when - faladoslist.Find(x => x.Equals(fd)).when).TotalHours;
+            Debug.Log("horas é " + hrs);
+            return hrs >= 8;
+        }
+        return true;
+
+    }
+    public override bool Equals(object obj)
+    {
+        return id == ((falados)obj).id;
     }
 }

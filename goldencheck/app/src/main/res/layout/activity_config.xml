@@ -5,44 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fundo"
-    tools:context=".checkinActivity">
+    tools:context=".ConfigActivity">
 
     <ImageView
-        android:id="@+id/plus"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:id="@+id/back"
+        android:layout_width="70dp"
+        android:layout_height="53dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/c" />
-
-    <ImageView
-        android:id="@+id/proxsort"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/d" />
-
-    <ImageView
-        android:id="@+id/efetuacheck"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/refresh"
-        app:layout_constraintStart_toEndOf="@+id/plus"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/b" />
+        app:srcCompat="@drawable/back" />
 
     <ListView
         android:id="@+id/list"
@@ -57,7 +31,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/efetuacheck" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/idname"
@@ -75,29 +49,29 @@
 
     <ImageView
         android:id="@+id/refresh"
-        android:layout_width="60dp"
+        android:layout_width="70dp"
         android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/config"
-        app:layout_constraintStart_toEndOf="@+id/efetuacheck"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/refresh" />
 
-    <ImageView
-        android:id="@+id/config"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/proxsort"
-        app:layout_constraintStart_toEndOf="@+id/refresh"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/config" />
+        android:gravity="center"
+        android:textColor="@color/bootstrap_brand_secondary_fill"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/refresh"
+        app:layout_constraintStart_toEndOf="@+id/back"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

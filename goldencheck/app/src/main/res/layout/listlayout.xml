@@ -10,15 +10,13 @@
         android:id="@+id/bgbarra"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cadeado"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/barravermelha" />
 
@@ -29,7 +27,7 @@
         android:layout_height="95dp"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="2dp"
-        android:src="@drawable/angelina"
+        android:src="@drawable/person"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -98,6 +96,18 @@
         app:layout_constraintStart_toEndOf="@+id/playimg"
         app:layout_constraintTop_toBottomOf="@+id/ontime" />
 
+    <TextView
+        android:id="@+id/block"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="2dp"
+        android:text="50 Visitas"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintStart_toEndOf="@+id/visitas"
+        app:layout_constraintTop_toBottomOf="@+id/ontime" />
+
     <ImageView
         android:id="@+id/cadeado"
         android:layout_width="35dp"
@@ -109,5 +119,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/cadeado" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="74dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:rotation="0"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/coroa" />
 
 </android.support.constraint.ConstraintLayout>

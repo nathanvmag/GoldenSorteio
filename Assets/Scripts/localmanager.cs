@@ -10,6 +10,7 @@ public class localmanager : MonoBehaviour {
     public AudioSource ad;
     public Slider slide;
     public InputField ip;
+    public Toggle falabemvindo;
     void Awake()
     {
         try
@@ -44,10 +45,23 @@ public class localmanager : MonoBehaviour {
     }
 	// Use this for initialization
 	void Start () {
+        if(PlayerPrefs.HasKey("bemvindo"))
+        {
+            falabemvindo.isOn = PlayerPrefs.GetInt("bemvindo") == 1;
+        }
+        else
+        {
+            falabemvindo.isOn = true;
+            PlayerPrefs.SetInt("bemvindo", 1);
+        }
         slide.value = ad.volume;
         StartCoroutine(reload()); ;
 		
 	}
+    public void changetogle()
+    {
+        PlayerPrefs.SetInt("bemvindo", falabemvindo.isOn ? 1 : 0);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -65,13 +79,18 @@ public class localmanager : MonoBehaviour {
         if (!string.IsNullOrEmpty(ip.text))
         {
             datamanager.localid = ip.text;
-            PlayerPrefs.SetString("localid", datamanager.localid);
-            PlayerPrefs.Save();
+        //    PlayerPrefs.SetString("localid", datamanager.localid);
+           // PlayerPrefs.Save();
             GetComponent<datamanager>().st();
         }
         openmenu(false);
 
 
+    }
+    public void logout()
+    {
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadScene(0);
     }
     public void openmenu(bool opn)
     {
@@ -92,6 +111,7 @@ public class localmanager : MonoBehaviour {
             yield return new WaitForSeconds(100);
         }
         Debug.Log("vou resetar");
-        SceneManager.LoadScene(0, LoadSceneMode.Single);
+        SceneManager.LoadScene(1
+            , LoadSceneMode.Single);
     }
 }

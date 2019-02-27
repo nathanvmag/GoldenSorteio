@@ -420,7 +420,7 @@ public class sorteiomanager : MonoBehaviour {
         bolaslat.GetComponent<bolinhaAnin>().multiplier2 = 10;
 
     }
-    void tryspeak(string text)
+    public void tryspeak(string text)
     {
         try
         {

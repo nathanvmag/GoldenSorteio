@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Golden Checkin</string>
+    <string name="title_activity_register">register</string>
 </resources>
