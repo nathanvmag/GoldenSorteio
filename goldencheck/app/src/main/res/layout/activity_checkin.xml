@@ -25,6 +25,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/d" />
@@ -39,6 +40,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/refresh"
         app:layout_constraintStart_toEndOf="@+id/plus"
         app:layout_constraintTop_toTopOf="parent"
@@ -61,13 +63,8 @@
 
     <TextView
         android:id="@+id/idname"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="17dp"
-        android:layout_marginStart="206dp"
-        android:layout_marginLeft="206dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        android:text="Id= "
         android:textColor="@color/bootstrap_brand_secondary_fill"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -96,6 +93,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/proxsort"
         app:layout_constraintStart_toEndOf="@+id/refresh"
         app:layout_constraintTop_toTopOf="parent"

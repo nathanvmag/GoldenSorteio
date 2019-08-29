@@ -66,7 +66,7 @@ public class checkinActivity extends AppCompatActivity {
             findViewById(R.id.proxsort).setVisibility(View.INVISIBLE);
 
         }
-        ((TextView)findViewById(R.id.idname)).setText(sp.getString("nomelocal","")+ "   Ver : "+BuildConfig.VERSION_NAME);
+        ((TextView)findViewById(R.id.idname)).setText(sp.getString("nomelocal","")+ " LocalId:"+getlast(4,localid)+"   Ver : "+BuildConfig.VERSION_NAME);
         findViewById(R.id.plus).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,6 +157,12 @@ public class checkinActivity extends AppCompatActivity {
         });
         lv = findViewById(R.id.list);
         getUsers(localid);
+    }
+    public String getlast(int a,String myString) {
+        if(myString.length() > a)
+            return myString.substring(myString.length()-a);
+        else
+            return myString;
     }
         void getUsers(final String localid)
         {
